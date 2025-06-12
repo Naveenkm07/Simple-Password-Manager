@@ -300,7 +300,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you encounter any issues or have questions:
 
 - **Issues**: [GitHub Issues](https://github.com/Naveenkm07/Simple-Password-Manager/issues)
-- **Email**: naveenkm07@gmail.com
+- **Email**: kmnaveenkm01@gmail.com
 - **Documentation**: [Wiki](https://github.com/Naveenkm07/Simple-Password-Manager/wiki)
 
 ## 🔄 Version History
