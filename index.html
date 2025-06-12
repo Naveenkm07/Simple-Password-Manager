@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHCE - Personal Data Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header__content">
+                <h1 class="header__title">NHCE</h1>
+                <div class="header__actions">
+                    <button class="btn btn--secondary btn--sm" id="themeToggle">🌙</button>
+                    <div class="header__user">
+                        <span>Welcome, User</span>
+                        <span class="header__time" id="currentTime"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <nav class="sidebar" id="sidebar">
+                <button class="sidebar__toggle" id="sidebarToggle">☰</button>
+                <ul class="sidebar__nav">
+                    <li><a href="#" class="sidebar__link active" data-tab="dashboard">🏠 Dashboard</a></li>
+                    <li><a href="#" class="sidebar__link" data-tab="tasks">✓ Tasks</a></li>
+                    <li><a href="#" class="sidebar__link" data-tab="notes">🔒 Secure Notes</a></li>
+                    <li><a href="#" class="sidebar__link" data-tab="contacts">👥 Contacts</a></li>
+                    <li><a href="#" class="sidebar__link" data-tab="backup">💾 Backup & Restore</a></li>
+                    <li><a href="#" class="sidebar__link" data-tab="passwords">🔑 Password Analysis</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="content">
+                <!-- Dashboard Tab -->
+                <div class="tab-content active" id="dashboard">
+                    <div class="dashboard">
+                        <div class="dashboard__header">
+                            <h2>Dashboard</h2>
+                            <p class="dashboard__date" id="dashboardDate"></p>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-card__icon">✓</div>
+                                <div class="stat-card__content">
+                                    <h3 id="totalTasks">0</h3>
+                                    <p>Total Tasks</p>
+                                    <small id="taskCompletion">0% completed</small>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card__icon">🔒</div>
+                                <div class="stat-card__content">
+                                    <h3 id="totalNotes">0</h3>
+                                    <p>Secure Notes</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card__icon">👥</div>
+                                <div class="stat-card__content">
+                                    <h3 id="totalContacts">0</h3>
+                                    <p>Contacts</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card__icon">🔑</div>
+                                <div class="stat-card__content">
+                                    <h3 id="avgPasswordStrength">0%</h3>
+                                    <p>Avg Password Strength</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-grid">
+                            <div class="chart-card">
+                                <h3>Task Completion Trend</h3>
+                                <div class="line-chart" id="taskChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Password Strength Distribution</h3>
+                                <div class="bar-chart" id="passwordChart"></div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+                            <h3>Quick Actions</h3>
+                            <div class="quick-actions__buttons">
+                                <button class="btn btn--primary" data-action="add-task">Add Task</button>
+                                <button class="btn btn--primary" data-action="add-note">Add Note</button>
+                                <button class="btn btn--primary" data-action="add-contact">Add Contact</button>
+                                <button class="btn btn--secondary" data-action="backup">Backup Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Tab -->
+                <div class="tab-content" id="tasks">
+                    <div class="tasks">
+                        <div class="tasks__header">
+                            <h2>Tasks</h2>
+                            <button class="btn btn--primary" id="addTaskBtn">Add Task</button>
+                        </div>
+
+                        <div class="tasks__filters">
+                            <select class="form-control" id="taskFilter">
+                                <option value="all">All Tasks</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="high">High Priority</option>
+                                <option value="medium">Medium Priority</option>
+                                <option value="low">Low Priority</option>
+                            </select>
+                            <div class="progress-bar">
+                                <div class="progress-bar__fill" id="tasksProgress"></div>
+                            </div>
+                        </div>
+
+                        <div class="task-form card" id="taskForm" style="display: none;">
+                            <div class="card__body">
+                                <h3>Add New Task</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="taskTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Priority</label>
+                                    <select class="form-control" id="taskPriority">
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Due Date</label>
+                                    <input type="date" class="form-control" id="taskDueDate">
+                                </div>
+                                <div class="flex gap-8">
+                                    <button class="btn btn--primary" id="saveTask">Save Task</button>
+                                    <button class="btn btn--secondary" id="cancelTask">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tasks__list" id="tasksList"></div>
+                    </div>
+                </div>
+
+                <!-- Secure Notes Tab -->
+                <div class="tab-content" id="notes">
+                    <div class="notes">
+                        <div class="notes__header">
+                            <h2>Secure Notes</h2>
+                            <button class="btn btn--primary" id="addNoteBtn">Add Note</button>
+                        </div>
+
+                        <div class="notes__filters">
+                            <input type="text" class="form-control" id="notesSearch" placeholder="Search notes...">
+                            <select class="form-control" id="notesFilter">
+                                <option value="all">All Categories</option>
+                                <option value="personal">Personal</option>
+                                <option value="work">Work</option>
+                                <option value="financial">Financial</option>
+                                <option value="health">Health</option>
+                            </select>
+                        </div>
+
+                        <div class="note-form card" id="noteForm" style="display: none;">
+                            <div class="card__body">
+                                <h3>Add New Note</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="noteTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" id="noteCategory">
+                                        <option value="personal">Personal</option>
+                                        <option value="work">Work</option>
+                                        <option value="financial">Financial</option>
+                                        <option value="health">Health</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Content</label>
+                                    <textarea class="form-control" id="noteContent" rows="6"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" id="noteEncrypted"> Encrypt this note
+                                    </label>
+                                </div>
+                                <div class="flex gap-8">
+                                    <button class="btn btn--primary" id="saveNote">Save Note</button>
+                                    <button class="btn btn--secondary" id="cancelNote">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="notes__list" id="notesList"></div>
+                    </div>
+                </div>
+
+                <!-- Contacts Tab -->
+                <div class="tab-content" id="contacts">
+                    <div class="contacts">
+                        <div class="contacts__header">
+                            <h2>Contacts</h2>
+                            <button class="btn btn--primary" id="addContactBtn">Add Contact</button>
+                        </div>
+
+                        <div class="contacts__filters">
+                            <input type="text" class="form-control" id="contactsSearch" placeholder="Search contacts...">
+                            <select class="form-control" id="contactsFilter">
+                                <option value="all">All Categories</option>
+                                <option value="family">Family</option>
+                                <option value="friends">Friends</option>
+                                <option value="work">Work</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+
+                        <div class="contact-form card" id="contactForm" style="display: none;">
+                            <div class="card__body">
+                                <h3>Add New Contact</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="contactName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contactEmail">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="contactPhone">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" id="contactAddress" rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" id="contactCategory">
+                                        <option value="work">Work</option>
+                                        <option value="friends">Friends</option>
+                                        <option value="family">Family</option>
+                                        <option value="business">Business</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-8">
+                                    <button class="btn btn--primary" id="saveContact">Save Contact</button>
+                                    <button class="btn btn--secondary" id="cancelContact">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contacts__list" id="contactsList"></div>
+                    </div>
+                </div>
+
+                <!-- Backup & Restore Tab -->
+                <div class="tab-content" id="backup">
+                    <div class="backup">
+                        <div class="backup__header">
+                            <h2>Backup & Restore</h2>
+                        </div>
+
+                        <div class="backup__grid">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Export Data</h3>
+                                    <p>Download your data as JSON file</p>
+                                    <div class="backup__options">
+                                        <label><input type="checkbox" id="exportTasks" checked> Tasks</label>
+                                        <label><input type="checkbox" id="exportNotes" checked> Notes</label>
+                                        <label><input type="checkbox" id="exportContacts" checked> Contacts</label>
+                                    </div>
+                                    <button class="btn btn--primary" id="exportData">Export Data</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Import Data</h3>
+                                    <p>Upload and restore your data from JSON file</p>
+                                    <input type="file" id="importFile" accept=".json" style="margin-bottom: 16px;">
+                                    <button class="btn btn--primary" id="importData">Import Data</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Data Statistics</h3>
+                                    <div class="backup__stats" id="dataStats"></div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Clear All Data</h3>
+                                    <p>Permanently delete all stored data</p>
+                                    <button class="btn btn--outline" id="clearAllData" style="color: var(--color-error); border-color: var(--color-error);">Clear All Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="backup__history card">
+                            <div class="card__body">
+                                <h3>Backup History</h3>
+                                <div id="backupHistory"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Analysis Tab -->
+                <div class="tab-content" id="passwords">
+                    <div class="passwords">
+                        <div class="passwords__header">
+                            <h2>Password Analysis</h2>
+                        </div>
+
+                        <div class="passwords__grid">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Password Analyzer</h3>
+                                    <div class="form-group">
+                                        <label class="form-label">Enter Password</label>
+                                        <input type="password" class="form-control" id="passwordInput" placeholder="Enter password to analyze">
+                                    </div>
+                                    <div class="password-strength">
+                                        <div class="password-strength__meter">
+                                            <div class="password-strength__fill" id="strengthMeter"></div>
+                                        </div>
+                                        <div class="password-strength__text" id="strengthText">Enter a password</div>
+                                    </div>
+                                    <div class="password-analysis" id="passwordAnalysis"></div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Password Generator</h3>
+                                    <div class="form-group">
+                                        <label class="form-label">Length: <span id="lengthValue">12</span></label>
+                                        <input type="range" id="passwordLength" min="8" max="32" value="12" class="form-control">
+                                    </div>
+                                    <div class="password-options">
+                                        <label><input type="checkbox" id="includeUppercase" checked> Uppercase (A-Z)</label>
+                                        <label><input type="checkbox" id="includeLowercase" checked> Lowercase (a-z)</label>
+                                        <label><input type="checkbox" id="includeNumbers" checked> Numbers (0-9)</label>
+                                        <label><input type="checkbox" id="includeSymbols" checked> Symbols (!@#$%)</label>
+                                    </div>
+                                    <button class="btn btn--primary" id="generatePassword">Generate Password</button>
+                                    <div class="generated-password" id="generatedPassword"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="password-recommendations card">
+                            <div class="card__body">
+                                <h3>Security Recommendations</h3>
+                                <div id="securityRecommendations">
+                                    <ul>
+                                        <li>Use at least 12 characters for strong passwords</li>
+                                        <li>Include a mix of uppercase, lowercase, numbers, and symbols</li>
+                                        <li>Avoid common words and personal information</li>
+                                        <li>Use unique passwords for each account</li>
+                                        <li>Consider using a password manager</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal for confirmations -->
+    <div class="modal" id="confirmModal">
+        <div class="modal__backdrop"></div>
+        <div class="modal__content">
+            <h3 id="modalTitle">Confirm Action</h3>
+            <p id="modalMessage">Are you sure you want to proceed?</p>
+            <div class="modal__actions">
+                <button class="btn btn--primary" id="modalConfirm">Confirm</button>
+                <button class="btn btn--secondary" id="modalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+        <button id="toastClose">×</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
