@@ -5,6 +5,7 @@ A modern, secure, and user-friendly password management application built with S
 ## 🌟 Features
 
 ### 🔒 Security Features
+ADA
 - **Advanced Encryption**: Passwords are encrypted using industry-standard encryption algorithms
 - **Secure Authentication**: Spring Security integration with customizable authentication
 - **Session Management**: Secure session handling with automatic timeout
